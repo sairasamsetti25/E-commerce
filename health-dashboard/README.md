@@ -222,7 +222,7 @@ The food tracker includes:
 
 ### Food-data sources
 
-The prototype uses [Open Food Facts](https://openfoodfacts.github.io/openfoodfacts-server/api/) for client-side product search. It is an open product database, so coverage and nutrition accuracy can vary by product and country. The app keeps a small local starter catalog as a fallback.
+The prototype queries both [Open Food Facts](https://openfoodfacts.github.io/openfoodfacts-server/api/) and [USDA FoodData Central](https://fdc.nal.usda.gov/api-guide/) for client-side product search. USDA uses `DEMO_KEY` by default for this prototype; a custom `window.CAREWELL_USDA_API_KEY` can be supplied for testing. Do not ship a private production key in browser JavaScript. It is an open product database, so coverage and nutrition accuracy can vary by product and country. The app keeps a small local starter catalog as a fallback.
 
 For a production food tracker, use a server-side integration with a managed nutrition data provider or [USDA FoodData Central](https://fdc.nal.usda.gov/api-guide/) so API keys, rate limits, normalization, attribution, and data quality can be controlled securely. Never expose a private production API key in browser JavaScript.
 
