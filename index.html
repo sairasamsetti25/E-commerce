@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NimbusCart Apparel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ==== Header ==== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="/" class="logo">
+        <img src="assets/logo.svg" alt="NimbusCart Apparel logo">
+        <span>NimbusCart</span>
+      </a>
+      <nav class="nav">
+        <ul>
+          <li><a href="/" class="active">Home</a></li>
+          <li><a href="/#shop">Shop</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+      <a href="/cart.html" class="cart-link">🛒 Cart (<span id="cart-count">0</span>)</a>
+    </div>
+  </header>
+
+  <!-- ==== Hero section ==== -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <h1>Elevate Your Style</h1>
+      <p>Premium apparel, custom‑branded for you.</p>
+      <a href="#shop" class="btn-primary">Shop Now</a>
+    </div>
+  </section>
+
+  <!-- ==== Shop / Product grid ==== -->
+  <main id="shop" class="shop-section">
+    <div class="container">
+      <h2>Featured Collection</h2>
+
+      <!-- Optional filter sidebar (mobile collapses) -->
+      <aside class="filters">
+        <h3>Filters</h3>
+        <label>
+          Category
+          <select>
+            <option>All</option>
+            <option>T‑Shirts</option>
+            <option>Hoodies</option>
+            <option>Accessories</option>
+          </select>
+        </label>
+        <label>
+          Size
+          <select>
+            <option>All</option>
+            <option>S</option>
+            <option>M</option>
+            <option>L</option>
+            <option>XL</option>
+          </select>
+        </label>
+        <label>
+          Price
+          <input type="range" min="0" max="200" step="5">
+        </label>
+      </aside>
+
+      <section class="product-grid">
+        <!-- Sample product cards – duplicate / generate from your data later -->
+        <article class="product-card">
+          <a href="product.html?id=1">
+            <img src="assets/products/tee‑01.jpg" alt="Classic Tee">
+            <h3>Classic Tee</h3>
+            <p class="price">$29.99</p>
+          </a>
+          <button class="btn-add" data-id="1">Add to Cart</button>
+        </article>
+
+        <article class="product-card">
+          <a href="product.html?id=2">
+            <img src="assets/products/hoodie‑01.jpg" alt="Cozy Hoodie">
+            <h3>Cozy Hoodie</h3>
+            <p class="price">$59.99</p>
+          </a>
+          <button class="btn-add" data-id="2">Add to Cart</button>
+        </article>
+
+        <!-- Add more cards or generate them dynamically with JS -->
+      </section>
+    </div>
+  </main>
+
+  <!-- ==== Footer ==== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-col">
+        <h4>About NimbusCart</h4>
+        <p>High‑quality, custom‑branded apparel for your brand.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/#shop">Shop</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Follow Us</h4>
+        <ul class="social">
+          <li><a href="#" aria-label="Instagram">📸</a></li>
+          <li><a href="#" aria-label="Twitter">🐦</a></li>
+          <li><a href="#" aria-label="Facebook">📘</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 NimbusCart Apparel. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- ==== Simple JS for “Add to Cart” demo ==== -->
+  <script>
+    const cartCount = document.getElementById('cart-count');
+    document.querySelectorAll('.btn-add').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cur = parseInt(cartCount.textContent, 10);
+        cartCount.textContent = cur + 1;
+      });
+    });
+  </script>
+</body>
+</html>
