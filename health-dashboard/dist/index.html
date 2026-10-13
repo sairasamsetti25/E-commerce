@@ -73,7 +73,7 @@
             </button>
             <div>
               <p class="eyebrow">Tuesday, October 13</p>
-              <h1>Hi, Alex<span aria-hidden="true">.</span></h1>
+              <h1>Hi, <span id="first-name">Alex</span><span aria-hidden="true">.</span></h1>
               <p class="subtitle">Here’s your daily health overview.</p>
             </div>
           </div>
@@ -117,14 +117,14 @@
             <div class="card-heading">
               <div>
                 <span class="metric-icon icon-blue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3S5.5 10.1 5.5 14.5a6.5 6.5 0 0 0 13 0C18.5 10.1 12 3 12 3z" /></svg></span>
-                <div><h3>Hydration</h3><p>Daily water goal</p></div>
+              <div><h3>Hydration</h3><p><span id="water-glasses">6</span> of <span id="water-goal-glasses">9</span> glasses</p></div>
               </div>
               <button class="more-button" type="button" aria-label="More hydration options" data-modal="hydration-modal">•••</button>
             </div>
             <div class="water-visual">
               <div class="water-rings" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
               <strong>1.6<span>L</span></strong>
-              <small>of 2.2 L today</small>
+              <small>of 2.2 L today · 250 ml per glass</small>
             </div>
             <div class="progress-line"><span style="width: 73%"></span></div>
             <div class="range-switch" aria-label="Hydration time range">
@@ -166,6 +166,32 @@
             <p>Choose one calming activity before bed. Consistency matters more than intensity.</p>
             <button class="button button-light" type="button" id="save-insight">Save note <span aria-hidden="true">→</span></button>
           </article>
+
+          <article class="card bmi-card reveal" id="bmi">
+            <div class="card-heading">
+              <div>
+                <span class="metric-icon icon-peach" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4v16M7 8h10M7 16h10" /></svg></span>
+                <div><h3>BMI & energy needs</h3><p>Your personal estimate</p></div>
+              </div>
+              <button class="more-button dark-more" type="button" aria-label="Open BMI calculator" data-modal="bmi-modal">•••</button>
+            </div>
+            <div class="bmi-summary"><strong id="bmi-value">22.4</strong><span id="bmi-category">Healthy range</span></div>
+            <div class="bmi-scale" aria-label="BMI scale"><span></span><span></span><span></span><span></span><i id="bmi-marker"></i></div>
+            <div class="card-meta"><span id="calorie-maintain">2,180 kcal maintain</span><button class="text-link inline-link" type="button" data-modal="bmi-modal">View full metrics <span aria-hidden="true">↗</span></button></div>
+          </article>
+
+          <article class="card food-card reveal" id="food-log">
+            <div class="card-heading">
+              <div>
+                <span class="metric-icon icon-peach" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4h12M8 4v4a4 4 0 0 0 8 0V4M5 20h14M8 12h8v8H8z" /></svg></span>
+                <div><h3>Food log</h3><p><span id="food-total">0</span> kcal logged today</p></div>
+              </div>
+              <button class="more-button dark-more" type="button" aria-label="Open food search" data-modal="food-modal">+</button>
+            </div>
+            <div class="food-progress"><span id="food-progress-bar"></span></div>
+            <div class="food-log-list" id="food-log-list"><p class="empty-log">Search a food to start your day.</p></div>
+            <button class="text-link" type="button" data-modal="food-modal">Search foods <span aria-hidden="true">↗</span></button>
+          </article>
         </section>
 
         <section class="privacy-note" aria-label="Privacy note">
@@ -203,10 +229,31 @@
       <span class="dialog-kicker">Your profile</span>
       <h2 id="profile-title">Keep your dashboard personal.</h2>
       <form id="profile-form" class="profile-form">
-        <label for="profile-name">Display name</label><input id="profile-name" name="profile-name" value="Alex Rivera" autocomplete="name" />
+        <label for="profile-name">Full name <span class="required-label">(required)</span></label><input id="profile-name" name="profile-name" value="Alex Rivera" autocomplete="name" required />
+        <div class="form-grid"><div><label for="profile-age">Age</label><input id="profile-age" name="profile-age" type="number" min="13" max="120" value="32" /></div><div><label for="profile-sex">Sex for estimate</label><select id="profile-sex" name="profile-sex"><option value="female">Female</option><option value="male">Male</option></select></div></div>
+        <div class="form-grid"><div><label for="profile-height">Height (cm)</label><input id="profile-height" name="profile-height" type="number" min="100" max="240" value="178" required /></div><div><label for="profile-weight">Weight (kg)</label><input id="profile-weight" name="profile-weight" type="number" min="30" max="300" step="0.1" value="71" required /></div></div>
+        <label for="profile-activity">Activity level</label><select id="profile-activity" name="profile-activity"><option value="1.2">Mostly seated</option><option value="1.375">Lightly active</option><option value="1.55" selected>Moderately active</option><option value="1.725">Very active</option></select>
         <label for="profile-goal">Daily focus</label><select id="profile-goal" name="profile-goal"><option>Better sleep</option><option>More movement</option><option>Steadier hydration</option></select>
         <button class="button button-dark dialog-primary" type="submit">Save profile <span aria-hidden="true">✓</span></button>
       </form>
+    </section>
+    <section class="dialog compact-dialog wide-dialog" id="bmi-modal" role="dialog" aria-modal="true" aria-labelledby="bmi-title" hidden>
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Close BMI calculator">×</button>
+      <span class="dialog-kicker">Personal metrics</span>
+      <h2 id="bmi-title">BMI and calorie targets.</h2>
+      <p>Estimates use the Mifflin–St Jeor equation and are for planning only, not medical advice.</p>
+      <div class="metric-results" aria-live="polite"><div><span>BMI</span><strong id="modal-bmi">22.4</strong><small id="modal-bmi-category">Healthy range</small></div><div><span>Body surface</span><strong id="body-surface">1.87</strong><small>m² estimate</small></div><div><span>Daily baseline</span><strong id="modal-bmr">1,560</strong><small>kcal BMR</small></div></div>
+      <div class="calorie-targets"><div><span>Lose weight</span><strong id="calorie-lose">1,680 kcal</strong><small>gentle deficit</small></div><div class="target-main"><span>Maintain weight</span><strong id="calorie-maintain-modal">2,180 kcal</strong><small>estimated daily need</small></div><div><span>Gain weight</span><strong id="calorie-gain">2,430 kcal</strong><small>gentle surplus</small></div></div>
+      <p class="helper-note">For adults 18+, calorie needs vary by health status, body composition, and activity. Consider a qualified professional for personalized guidance.</p>
+    </section>
+    <section class="dialog compact-dialog wide-dialog" id="food-modal" role="dialog" aria-modal="true" aria-labelledby="food-title" hidden>
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Close food search">×</button>
+      <span class="dialog-kicker">Food tracker</span>
+      <h2 id="food-title">Log what you ate.</h2>
+      <p>Search common foods or packaged products. Calories are shown per 100 g or per serving when available.</p>
+      <form id="food-search-form" class="food-search-form"><label class="sr-only" for="food-search">Search foods</label><input id="food-search" type="search" placeholder="Try oats, banana, yogurt..." autocomplete="off" required /><button class="button button-dark" type="submit">Search</button></form>
+      <div id="food-search-status" class="search-status" role="status" aria-live="polite">Try a food name to search the catalog.</div>
+      <div id="food-results" class="food-results"></div>
     </section>
     <section class="dialog compact-dialog" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title" hidden>
       <button class="dialog-close" type="button" data-close-dialog aria-label="Close settings dialog">×</button>
