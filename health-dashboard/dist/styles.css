@@ -211,3 +211,13 @@ body.dialog-open { overflow: hidden; }
 .water-presets button:hover { border-color: var(--blue-deep); background: #edf7fc; }
 @media (max-width: 760px) { .water-presets { grid-template-columns: 1fr; } }
 
+/* Profile form spacing: keep each field group visually distinct. */
+.profile-form { gap: 12px; }
+.profile-form > label { margin-top: 8px; }
+.profile-form > label + input,
+.profile-form > label + select { margin-bottom: 6px; }
+.profile-form .form-grid { gap: 20px; margin: 6px 0 8px; }
+.profile-form .form-grid > div { display: grid; gap: 7px; }
+.profile-form .form-grid label { margin-top: 0; }
+@media (max-width: 760px) { .profile-form .form-grid { gap: 12px; margin: 4px 0 6px; } }
+
