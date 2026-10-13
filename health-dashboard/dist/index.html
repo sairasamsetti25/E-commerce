@@ -118,14 +118,19 @@
                 <span class="metric-icon icon-blue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3S5.5 10.1 5.5 14.5a6.5 6.5 0 0 0 13 0C18.5 10.1 12 3 12 3z" /></svg></span>
               <div><h3>Hydration</h3><p><span id="water-glasses">6</span> of <span id="water-goal-glasses">9</span> glasses</p></div>
               </div>
-              <button class="more-button" type="button" aria-label="More hydration options" data-modal="hydration-modal">•••</button>
+              <button class="button button-light hydration-log-button" type="button" data-modal="hydration-modal">Log water <span aria-hidden="true">+</span></button>
             </div>
             <div class="water-visual">
               <div class="water-rings" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
               <strong>1.6<span>L</span></strong>
               <small>of 2.2 L today · 250 ml per glass</small>
             </div>
-            <div class="progress-line"><span style="width: 73%"></span></div>
+            <div class="hydration-progress-copy"><strong><span id="water-percent">73</span>% complete</strong><span><b id="water-remaining">600 ml</b> left today</span></div>
+            <div class="progress-line" role="progressbar" aria-label="Water goal progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="73"><span style="width: 73%"></span></div>
+            <div class="water-quick-actions" aria-label="Quick add water">
+              <button type="button" data-quick-water="250"><span aria-hidden="true">+</span> 1 glass</button>
+              <button type="button" data-quick-water="500"><span aria-hidden="true">+</span> 2 glasses</button>
+            </div>
             <div class="range-switch" aria-label="Hydration time range">
               <button type="button" data-range="D" aria-pressed="true">D</button>
               <button type="button" data-range="W" aria-pressed="false">W</button>
@@ -266,7 +271,9 @@
       <button class="dialog-close" type="button" data-close-dialog aria-label="Close hydration dialog">×</button>
       <span class="dialog-kicker">Hydration</span>
       <h2 id="hydration-title">Log a glass of water.</h2>
-      <p>Demo data is stored only in this browser.</p>
+      <p>Choose a quick amount or set your daily goal. Demo data is stored only in this browser.</p>
+      <label class="goal-field" for="water-goal-select">Daily goal</label><select id="water-goal-select"><option value="1500">6 glasses · 1.5 L</option><option value="2000">8 glasses · 2.0 L</option><option value="2200" selected>9 glasses · 2.2 L</option><option value="2500">10 glasses · 2.5 L</option><option value="3000">12 glasses · 3.0 L</option></select>
+      <div class="water-presets"><button type="button" data-water-amount="250">+ 1 glass</button><button type="button" data-water-amount="500">+ 2 glasses</button><button type="button" data-water-amount="750">+ 3 glasses</button></div>
       <div class="hydration-stepper"><button type="button" id="remove-water" aria-label="Remove 250 milliliters">−</button><strong><span id="water-entry">250</span> ml</strong><button type="button" id="add-water" aria-label="Add 250 milliliters">+</button></div>
       <button class="button button-dark dialog-primary" type="button" id="save-water">Add to today <span aria-hidden="true">✓</span></button>
     </section>
