@@ -3,189 +3,47 @@ const overlay = document.querySelector('#overlay');
 const modalBackdrop = document.querySelector('#modal-backdrop');
 const toast = document.querySelector('#toast');
 const storageKey = 'carewell-demo-state-v1';
-const defaultState = {
-  waterMl: 1600,
-  planComplete: false,
-  movementDone: 3,
-  profileName: 'Alex Rivera',
-  profileGoal: 'Better sleep',
-  reminders: true,
-  insights: true,
-  selectedRange: 'D',
-  selectedPlan: 'Monthly',
-};
-
+const defaultState = { waterMl: 1600, waterGoalMl: 2200, planComplete: false, movementDone: 3, profileName: '', profileGoal: 'Better sleep', profileAge: 32, profileSex: 'female', profileHeight: 178, profileWeight: 71, profileActivity: 1.55, reminders: true, insights: true, selectedRange: 'D', selectedPlan: 'Monthly', foodLog: [] };
+const localFoods = [
+  { id: 'local-oats', name: 'Oats, dry', brand: 'Common food', calories: 389, protein: 16.9, carbs: 66.3, fat: 6.9, serving: '100 g' },
+  { id: 'local-banana', name: 'Banana', brand: 'Common food', calories: 89, protein: 1.1, carbs: 22.8, fat: 0.3, serving: '100 g' },
+  { id: 'local-yogurt', name: 'Greek yogurt, plain', brand: 'Common food', calories: 59, protein: 10.3, carbs: 3.6, fat: 0.4, serving: '100 g' },
+  { id: 'local-chicken', name: 'Chicken breast, cooked', brand: 'Common food', calories: 165, protein: 31, carbs: 0, fat: 3.6, serving: '100 g' },
+  { id: 'local-rice', name: 'Rice, white, cooked', brand: 'Common food', calories: 130, protein: 2.7, carbs: 28.2, fat: 0.3, serving: '100 g' },
+  { id: 'local-egg', name: 'Egg, whole, cooked', brand: 'Common food', calories: 155, protein: 13, carbs: 1.1, fat: 11, serving: '100 g' },
+];
 let state = { ...defaultState, ...readState() };
-let toastTimer;
-let lastFocusedElement = null;
-let activeDialog = null;
-
-function readState() {
-  try { return JSON.parse(localStorage.getItem(storageKey)) || {}; } catch { return {}; }
-}
-
-function saveState() {
-  localStorage.setItem(storageKey, JSON.stringify(state));
-}
-
-function showToast(message) {
-  toast.textContent = message;
-  toast.classList.add('show');
-  window.clearTimeout(toastTimer);
-  toastTimer = window.setTimeout(() => toast.classList.remove('show'), 3200);
-}
-
-function closeMenu() {
-  body.classList.remove('menu-open');
-  overlay.hidden = true;
-}
-
+if (!Array.isArray(state.foodLog)) state.foodLog = [];
+let toastTimer; let lastFocusedElement = null; let activeDialog = null; let waterEntry = 250;
+function readState() { try { return JSON.parse(localStorage.getItem(storageKey)) || {}; } catch { return {}; } }
+function saveState() { localStorage.setItem(storageKey, JSON.stringify(state)); }
+function showToast(message) { toast.textContent = message; toast.classList.add('show'); window.clearTimeout(toastTimer); toastTimer = window.setTimeout(() => toast.classList.remove('show'), 3200); }
+function closeMenu() { body.classList.remove('menu-open'); overlay.hidden = true; }
+function firstName() { return state.profileName.trim().split(/\s+/)[0] || 'there'; }
+function calculateMetrics() { const height = Number(state.profileHeight) || 178; const weight = Number(state.profileWeight) || 71; const age = Number(state.profileAge) || 32; const bmi = weight / ((height / 100) ** 2); const category = bmi < 18.5 ? 'Below healthy range' : bmi < 25 ? 'Healthy range' : bmi < 30 ? 'Above healthy range' : 'Higher range'; const bmr = (10 * weight) + (6.25 * height) - (5 * age) + (state.profileSex === 'male' ? 5 : -161); const maintain = Math.round(bmr * (Number(state.profileActivity) || 1.55)); return { bmi, category, bmr: Math.round(bmr), maintain, lose: Math.max(1200, maintain - 500), gain: maintain + 250, surface: Math.sqrt((height * weight) / 3600) }; }
 function updateDashboard() {
-  const waterValue = document.querySelector('.water-visual strong');
-  const progress = document.querySelector('.progress-line span');
-  const waterCopy = document.querySelector('.water-visual small');
-  const waterPercent = Math.min(100, Math.round((state.waterMl / 2200) * 100));
-  const rangeLabels = { D: 'today', W: 'this week', M: 'this month' };
-  waterValue.innerHTML = `${(state.waterMl / 1000).toFixed(1)}<span>L</span>`;
-  waterCopy.textContent = `${waterPercent}% of 2.2 L ${rangeLabels[state.selectedRange] || 'today'}`;
-  progress.style.width = `${waterPercent}%`;
-
-  const planButton = document.querySelector('#start-plan');
-  planButton.innerHTML = state.planComplete ? 'Routine complete <span aria-hidden="true">✓</span>' : 'Start plan <span aria-hidden="true">→</span>';
-  planButton.classList.toggle('is-complete', state.planComplete);
-  document.querySelector('.hero-card .status-pill').innerHTML = state.planComplete ? '<span class="status-dot"></span> Completed today' : '<span class="status-dot"></span> Today’s focus';
-
-  const movementCopy = document.querySelector('.movement-copy strong');
-  movementCopy.innerHTML = `${state.movementDone} <span>of 4</span>`;
-  document.querySelectorAll('.week-dots span').forEach((dot, index) => dot.classList.toggle('done', index < state.movementDone));
-  document.querySelector('.profile-copy strong').textContent = state.profileName;
-  document.querySelector('.profile-copy small').textContent = state.profileGoal;
-  document.querySelector('#profile-name').value = state.profileName;
-  document.querySelector('#profile-goal').value = state.profileGoal;
-  document.querySelectorAll('[data-setting]').forEach((button) => {
-    const enabled = Boolean(state[button.dataset.setting]);
-    button.classList.toggle('is-on', enabled);
-    button.setAttribute('aria-checked', String(enabled));
-  });
-  document.querySelectorAll('[data-range]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.range === state.selectedRange)));
+  const metrics = calculateMetrics(); const waterPercent = Math.min(100, Math.round((state.waterMl / state.waterGoalMl) * 100)); const waterGlasses = Math.round(state.waterMl / 250); const goalGlasses = Math.round(state.waterGoalMl / 250); const rangeLabels = { D: 'today', W: 'this week', M: 'this month' };
+  document.querySelector('#first-name').textContent = firstName(); document.querySelector('.profile-copy strong').textContent = state.profileName || 'Create your profile'; document.querySelector('.profile-copy small').textContent = state.profileName ? state.profileGoal : 'Set up your profile'; document.querySelector('.water-visual strong').innerHTML = `${(state.waterMl / 1000).toFixed(1)}<span>L</span>`; document.querySelector('.water-visual small').textContent = `${waterPercent}% of ${(state.waterGoalMl / 1000).toFixed(1)} L ${rangeLabels[state.selectedRange] || 'today'} · 250 ml per glass`; document.querySelector('.progress-line span').style.width = `${waterPercent}%`; document.querySelector('#water-glasses').textContent = waterGlasses; document.querySelector('#water-goal-glasses').textContent = goalGlasses;
+  document.querySelector('#bmi-value').textContent = metrics.bmi.toFixed(1); document.querySelector('#bmi-category').textContent = metrics.category; document.querySelector('#bmi-marker').style.left = `${Math.min(96, Math.max(4, ((metrics.bmi - 15) / 25) * 100))}%`; document.querySelector('#calorie-maintain').textContent = `${metrics.maintain.toLocaleString()} kcal maintain`; document.querySelector('#modal-bmi').textContent = metrics.bmi.toFixed(1); document.querySelector('#modal-bmi-category').textContent = metrics.category; document.querySelector('#body-surface').textContent = metrics.surface.toFixed(2); document.querySelector('#modal-bmr').textContent = metrics.bmr.toLocaleString(); document.querySelector('#calorie-lose').textContent = `${metrics.lose.toLocaleString()} kcal`; document.querySelector('#calorie-maintain-modal').textContent = `${metrics.maintain.toLocaleString()} kcal`; document.querySelector('#calorie-gain').textContent = `${metrics.gain.toLocaleString()} kcal`;
+  const planButton = document.querySelector('#start-plan'); planButton.innerHTML = state.planComplete ? 'Routine complete <span aria-hidden="true">✓</span>' : 'Start plan <span aria-hidden="true">→</span>'; planButton.classList.toggle('is-complete', state.planComplete); document.querySelector('.hero-card .status-pill').innerHTML = state.planComplete ? '<span class="status-dot"></span> Completed today' : '<span class="status-dot"></span> Today’s focus'; document.querySelector('.movement-copy strong').innerHTML = `${state.movementDone} <span>of 4</span>`; document.querySelectorAll('.week-dots span').forEach((dot, index) => dot.classList.toggle('done', index < state.movementDone));
+  document.querySelector('#profile-name').value = state.profileName; document.querySelector('#profile-age').value = state.profileAge; document.querySelector('#profile-sex').value = state.profileSex; document.querySelector('#profile-height').value = state.profileHeight; document.querySelector('#profile-weight').value = state.profileWeight; document.querySelector('#profile-activity').value = state.profileActivity; document.querySelector('#profile-goal').value = state.profileGoal; document.querySelectorAll('[data-setting]').forEach((button) => { const enabled = Boolean(state[button.dataset.setting]); button.classList.toggle('is-on', enabled); button.setAttribute('aria-checked', String(enabled)); }); document.querySelectorAll('[data-range]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.range === state.selectedRange))); renderFoodLog();
 }
+function openDialog(id, trigger) { const dialog = document.querySelector(`#${id}`); if (!dialog) return; closeMenu(); lastFocusedElement = trigger || document.activeElement; activeDialog = dialog; modalBackdrop.hidden = false; dialog.hidden = false; body.classList.add('dialog-open'); const firstControl = dialog.querySelector('button, input, select, [tabindex="0"]'); (firstControl || dialog).focus(); if (id === 'food-modal') document.querySelector('#food-search').focus(); }
+function closeDialog() { if (!activeDialog) return; activeDialog.hidden = true; activeDialog = null; modalBackdrop.hidden = true; body.classList.remove('dialog-open'); if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') lastFocusedElement.focus(); }
+function cycleDialogFocus(event) { if (!activeDialog || event.key !== 'Tab') return; const focusable = [...activeDialog.querySelectorAll('button, input, select, [href], [tabindex]:not([tabindex="-1"])')].filter((element) => !element.disabled); if (!focusable.length) return; const first = focusable[0]; const last = focusable[focusable.length - 1]; if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); } if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); } }
+function escapeHtml(value) { return String(value).replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char])); }
+function renderFoodLog() { const total = state.foodLog.reduce((sum, item) => sum + item.calories, 0); document.querySelector('#food-total').textContent = total.toLocaleString(); document.querySelector('#food-progress-bar').style.width = `${Math.min(100, Math.round((total / calculateMetrics().maintain) * 100))}%`; const list = document.querySelector('#food-log-list'); list.innerHTML = state.foodLog.length ? state.foodLog.map((item, index) => `<div class="logged-food"><div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.serving)} · ${item.calories} kcal</small></div><button type="button" data-remove-food="${index}" aria-label="Remove ${escapeHtml(item.name)}">×</button></div>`).join('') : '<p class="empty-log">Search a food to start your day.</p>'; list.querySelectorAll('[data-remove-food]').forEach((button) => button.addEventListener('click', () => { state.foodLog.splice(Number(button.dataset.removeFood), 1); saveState(); updateDashboard(); showToast('Food removed from today.'); })); }
+function renderFoodResults(results, source = 'local catalog') { const container = document.querySelector('#food-results'); document.querySelector('#food-search-status').textContent = results.length ? `${results.length} results from ${source}. Select an item to add it.` : 'No matching foods found. Try a broader search.'; container.innerHTML = results.map((food) => `<button type="button" class="food-result" data-food='${escapeHtml(JSON.stringify(food))}'><span><strong>${escapeHtml(food.name)}</strong><small>${escapeHtml(food.brand || 'Food database')} · ${escapeHtml(food.serving || '100 g')}</small></span><b>${Number(food.calories || 0).toLocaleString()} kcal</b></button>`).join(''); container.querySelectorAll('[data-food]').forEach((button) => button.addEventListener('click', () => { const food = JSON.parse(button.dataset.food); state.foodLog.push({ ...food, calories: Math.round(Number(food.calories) || 0) }); saveState(); updateDashboard(); closeDialog(); showToast(`${food.name} added to today’s food log.`); })); }
+async function searchFoods(query) { const localResults = localFoods.filter((food) => `${food.name} ${food.brand}`.toLowerCase().includes(query.toLowerCase())); renderFoodResults(localResults, 'Carewell starter foods'); try { const url = `https://world.openfoodfacts.org/api/v2/search?categories_tags_en=foods&search_terms=${encodeURIComponent(query)}&fields=product_name,brands,nutriments,serving_size&page_size=8`; const response = await fetch(url, { headers: { Accept: 'application/json' } }); if (!response.ok) throw new Error('Food search unavailable'); const data = await response.json(); const apiResults = (data.products || []).filter((product) => product.product_name && product.nutriments?.['energy-kcal_100g']).map((product, index) => ({ id: product.code || `off-${index}`, name: product.product_name, brand: product.brands || 'Open Food Facts', calories: Math.round(product.nutriments['energy-kcal_100g']), protein: Number(product.nutriments.proteins_100g || 0), carbs: Number(product.nutriments.carbohydrates_100g || 0), fat: Number(product.nutriments.fat_100g || 0), serving: product.serving_size || '100 g' })); renderFoodResults(apiResults.length ? apiResults : localResults, apiResults.length ? 'Open Food Facts' : 'Carewell starter foods'); } catch { document.querySelector('#food-search-status').textContent = localResults.length ? 'Live search is unavailable; showing starter foods.' : 'Live search is unavailable. Try oats, banana, yogurt, chicken, rice, or egg.'; } }
 
-function openDialog(id, trigger) {
-  const dialog = document.querySelector(`#${id}`);
-  if (!dialog) return;
-  closeMenu();
-  lastFocusedElement = trigger || document.activeElement;
-  activeDialog = dialog;
-  modalBackdrop.hidden = false;
-  dialog.hidden = false;
-  body.classList.add('dialog-open');
-  const firstControl = dialog.querySelector('button, input, select, [tabindex="0"]');
-  (firstControl || dialog).focus();
-}
-
-function closeDialog() {
-  if (!activeDialog) return;
-  activeDialog.hidden = true;
-  activeDialog = null;
-  modalBackdrop.hidden = true;
-  body.classList.remove('dialog-open');
-  if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') lastFocusedElement.focus();
-}
-
-function cycleDialogFocus(event) {
-  if (!activeDialog || event.key !== 'Tab') return;
-  const focusable = [...activeDialog.querySelectorAll('button, input, select, [href], [tabindex]:not([tabindex="-1"])')].filter((element) => !element.disabled);
-  if (!focusable.length) return;
-  const first = focusable[0];
-  const last = focusable[focusable.length - 1];
-  if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-  if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
-}
-
-document.querySelector('#open-menu').addEventListener('click', () => { body.classList.add('menu-open'); overlay.hidden = false; });
-document.querySelector('#close-menu').addEventListener('click', closeMenu);
-overlay.addEventListener('click', closeMenu);
-document.querySelectorAll('.nav-item').forEach((item) => item.addEventListener('click', (event) => {
-  closeMenu();
-  const modal = item.dataset.modal;
-  if (modal) { event.preventDefault(); openDialog(modal, item); }
-  if (item.id === 'notifications-link') { event.preventDefault(); showToast('You have two gentle reminders waiting.'); }
-}));
-
-document.querySelectorAll('[data-modal]').forEach((button) => button.addEventListener('click', () => openDialog(button.dataset.modal, button)));
-document.querySelectorAll('[data-close-dialog]').forEach((button) => button.addEventListener('click', closeDialog));
-modalBackdrop.addEventListener('click', closeDialog);
-
-document.querySelector('#upgrade-button').addEventListener('click', (event) => openDialog('upgrade-modal', event.currentTarget));
-document.querySelector('#profile-button').addEventListener('click', (event) => openDialog('profile-modal', event.currentTarget));
-document.querySelector('#view-plan').addEventListener('click', (event) => openDialog('plan-modal', event.currentTarget));
-document.querySelector('#start-plan').addEventListener('click', () => {
-  if (state.planComplete) { showToast('This routine is already complete for today.'); return; }
-  openDialog('plan-modal', document.querySelector('#start-plan'));
-});
-document.querySelector('#complete-plan').addEventListener('click', () => {
-  state.planComplete = true; saveState(); updateDashboard(); closeDialog(); showToast('Nice work. Your evening routine is complete.');
-});
-
-document.querySelectorAll('.plan-option').forEach((button) => button.addEventListener('click', () => {
-  state.selectedPlan = button.dataset.plan;
-  document.querySelectorAll('.plan-option').forEach((option) => option.classList.toggle('selected', option === button));
-}));
-document.querySelector('#choose-plan').addEventListener('click', () => { saveState(); closeDialog(); showToast(`${state.selectedPlan} plan selected. Billing will be added later.`); });
-
-let waterEntry = 250;
-document.querySelector('#add-water').addEventListener('click', () => { waterEntry = Math.min(1000, waterEntry + 250); document.querySelector('#water-entry').textContent = waterEntry; });
-document.querySelector('#remove-water').addEventListener('click', () => { waterEntry = Math.max(250, waterEntry - 250); document.querySelector('#water-entry').textContent = waterEntry; });
-document.querySelector('#save-water').addEventListener('click', () => { state.waterMl += waterEntry; saveState(); updateDashboard(); closeDialog(); showToast(`${waterEntry} ml added to today’s hydration.`); waterEntry = 250; document.querySelector('#water-entry').textContent = waterEntry; });
-
-document.querySelectorAll('[data-sleep]').forEach((button) => button.addEventListener('click', () => {
-  document.querySelectorAll('[data-sleep]').forEach((option) => option.classList.toggle('selected', option === button));
-  document.querySelector('#sleep-feedback-copy').textContent = `${button.dataset.sleep} noted. This will inform a future demo insight.`;
-  showToast(`Sleep feedback saved: ${button.dataset.sleep}.`);
-}));
-
-document.querySelectorAll('[data-movement]').forEach((button) => button.addEventListener('click', () => {
-  document.querySelectorAll('[data-movement]').forEach((option) => option.classList.toggle('selected', option === button));
-  state.movementDone = Math.min(4, state.movementDone + 1); saveState(); updateDashboard();
-  document.querySelector('#movement-feedback-copy').textContent = `${button.dataset.movement} added to today’s movement plan.`;
-  showToast('Movement plan updated.');
-}));
-document.querySelector('#open-movement').addEventListener('click', (event) => openDialog('movement-modal', event.currentTarget));
-
-document.querySelector('#profile-form').addEventListener('submit', (event) => {
-  event.preventDefault();
-  state.profileName = document.querySelector('#profile-name').value.trim() || defaultState.profileName;
-  state.profileGoal = document.querySelector('#profile-goal').value;
-  saveState(); updateDashboard(); closeDialog(); showToast('Profile preferences saved.');
-});
-document.querySelectorAll('[data-setting]').forEach((button) => button.addEventListener('click', () => {
-  const key = button.dataset.setting; state[key] = !state[key]; updateDashboard();
-}));
-document.querySelector('#save-settings').addEventListener('click', () => { saveState(); closeDialog(); showToast('Privacy settings saved.'); });
-
-document.querySelectorAll('[data-range]').forEach((button) => button.addEventListener('click', () => {
-  state.selectedRange = button.dataset.range;
-  const labels = { D: 'today', W: 'this week', M: 'this month' };
-  document.querySelector('.water-visual small').textContent = `${Math.min(100, Math.round((state.waterMl / 2200) * 100))}% of 2.2 L ${labels[state.selectedRange]}`;
-  saveState(); updateDashboard(); showToast(`Hydration view changed to ${labels[state.selectedRange]}.`);
-}));
-
-const search = document.querySelector('#metric-search');
-search.addEventListener('input', (event) => {
-  const query = event.target.value.trim().toLowerCase();
-  const cards = [...document.querySelectorAll('.card')];
-  cards.forEach((card) => { card.hidden = Boolean(query) && !card.textContent.toLowerCase().includes(query); });
-  showToast(query ? `${cards.filter((card) => !card.hidden).length} matching metric cards.` : 'Showing all metric cards.');
-});
-
-window.addEventListener('keydown', (event) => {
-  if (activeDialog) {
-    if (event.key === 'Escape') closeDialog();
-    cycleDialogFocus(event);
-    return;
-  }
-  if (event.key === '/' && document.activeElement !== search) { event.preventDefault(); search.focus(); }
-  if (event.key === 'Escape') closeMenu();
-});
-
+document.querySelector('#open-menu').addEventListener('click', () => { body.classList.add('menu-open'); overlay.hidden = false; }); document.querySelector('#close-menu').addEventListener('click', closeMenu); overlay.addEventListener('click', closeMenu);
+document.querySelectorAll('.nav-item').forEach((item) => item.addEventListener('click', (event) => { closeMenu(); const modal = item.dataset.modal; if (modal) { event.preventDefault(); openDialog(modal, item); } if (item.id === 'notifications-link') { event.preventDefault(); showToast('You have two gentle reminders waiting.'); } })); document.querySelectorAll('[data-modal]').forEach((button) => button.addEventListener('click', () => openDialog(button.dataset.modal, button))); document.querySelectorAll('[data-close-dialog]').forEach((button) => button.addEventListener('click', closeDialog)); modalBackdrop.addEventListener('click', closeDialog);
+document.querySelector('#upgrade-button').addEventListener('click', (event) => openDialog('upgrade-modal', event.currentTarget)); document.querySelector('#profile-button').addEventListener('click', (event) => openDialog('profile-modal', event.currentTarget)); document.querySelector('#view-plan').addEventListener('click', (event) => openDialog('plan-modal', event.currentTarget)); document.querySelector('#start-plan').addEventListener('click', () => { if (state.planComplete) { showToast('This routine is already complete for today.'); return; } openDialog('plan-modal', document.querySelector('#start-plan')); }); document.querySelector('#complete-plan').addEventListener('click', () => { state.planComplete = true; saveState(); updateDashboard(); closeDialog(); showToast('Nice work. Your evening routine is complete.'); });
+document.querySelectorAll('.plan-option').forEach((button) => button.addEventListener('click', () => { state.selectedPlan = button.dataset.plan; document.querySelectorAll('.plan-option').forEach((option) => option.classList.toggle('selected', option === button)); })); document.querySelector('#choose-plan').addEventListener('click', () => { saveState(); closeDialog(); showToast(`${state.selectedPlan} plan selected. Billing will be added later.`); });
+document.querySelector('#add-water').addEventListener('click', () => { waterEntry = Math.min(1000, waterEntry + 250); document.querySelector('#water-entry').textContent = waterEntry; }); document.querySelector('#remove-water').addEventListener('click', () => { waterEntry = Math.max(250, waterEntry - 250); document.querySelector('#water-entry').textContent = waterEntry; }); document.querySelector('#save-water').addEventListener('click', () => { state.waterMl += waterEntry; saveState(); updateDashboard(); closeDialog(); showToast(`${waterEntry} ml added to today’s hydration.`); waterEntry = 250; document.querySelector('#water-entry').textContent = waterEntry; });
+document.querySelectorAll('[data-sleep]').forEach((button) => button.addEventListener('click', () => { document.querySelectorAll('[data-sleep]').forEach((option) => option.classList.toggle('selected', option === button)); document.querySelector('#sleep-feedback-copy').textContent = `${button.dataset.sleep} noted. This will inform a future demo insight.`; showToast(`Sleep feedback saved: ${button.dataset.sleep}.`); })); document.querySelectorAll('[data-movement]').forEach((button) => button.addEventListener('click', () => { document.querySelectorAll('[data-movement]').forEach((option) => option.classList.toggle('selected', option === button)); state.movementDone = Math.min(4, state.movementDone + 1); saveState(); updateDashboard(); document.querySelector('#movement-feedback-copy').textContent = `${button.dataset.movement} added to today’s movement plan.`; showToast('Movement plan updated.'); })); document.querySelector('#open-movement').addEventListener('click', (event) => openDialog('movement-modal', event.currentTarget));
+document.querySelector('#profile-form').addEventListener('submit', (event) => { event.preventDefault(); const form = new FormData(event.currentTarget); state.profileName = String(form.get('profile-name') || '').trim(); state.profileGoal = String(form.get('profile-goal')); state.profileAge = Number(form.get('profile-age')) || 32; state.profileSex = String(form.get('profile-sex')); state.profileHeight = Number(form.get('profile-height')) || 178; state.profileWeight = Number(form.get('profile-weight')) || 71; state.profileActivity = Number(form.get('profile-activity')) || 1.55; if (!state.profileName) { showToast('Add your name to create a profile.'); document.querySelector('#profile-name').focus(); return; } saveState(); updateDashboard(); closeDialog(); showToast(`Welcome, ${firstName()}. Your metrics are updated.`); }); document.querySelectorAll('[data-setting]').forEach((button) => button.addEventListener('click', () => { const key = button.dataset.setting; state[key] = !state[key]; updateDashboard(); })); document.querySelector('#save-settings').addEventListener('click', () => { saveState(); closeDialog(); showToast('Privacy settings saved.'); });
+document.querySelectorAll('[data-range]').forEach((button) => button.addEventListener('click', () => { state.selectedRange = button.dataset.range; saveState(); updateDashboard(); showToast(`Hydration view changed to ${button.textContent === 'D' ? 'today' : button.textContent === 'W' ? 'this week' : 'this month'}.`); })); document.querySelector('#food-search-form').addEventListener('submit', (event) => { event.preventDefault(); const query = document.querySelector('#food-search').value.trim(); if (query) searchFoods(query); });
+const search = document.querySelector('#metric-search'); search.addEventListener('input', (event) => { const query = event.target.value.trim().toLowerCase(); const cards = [...document.querySelectorAll('.card')]; cards.forEach((card) => { card.hidden = Boolean(query) && !card.textContent.toLowerCase().includes(query); }); showToast(query ? `${cards.filter((card) => !card.hidden).length} matching metric cards.` : 'Showing all metric cards.'); }); window.addEventListener('keydown', (event) => { if (activeDialog) { if (event.key === 'Escape') closeDialog(); cycleDialogFocus(event); return; } if (event.key === '/' && document.activeElement !== search) { event.preventDefault(); search.focus(); } if (event.key === 'Escape') closeMenu(); });
 updateDashboard();
+if (!state.profileName) window.setTimeout(() => openDialog('profile-modal', document.querySelector('#profile-button')), 450);
