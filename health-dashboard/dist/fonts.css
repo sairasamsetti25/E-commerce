@@ -1,0 +1,13 @@
+/* Typography is intentionally isolated so the visual direction can change without touching layout. */
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Raleway:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-body: 'Raleway', sans-serif;
+  --font-display: 'Lora', serif;
+}
+
+body { font-family: var(--font-body); }
+.brand-name, h1, .hero-card h2, .visual-caption span, .water-visual strong, .sleep-score strong,
+.movement-copy strong, .bmi-summary strong, .dialog h2, .metric-results strong, .calorie-targets strong,
+.hydration-stepper strong { font-family: var(--font-display); }
+.water-visual strong span, .movement-copy strong span { font-family: var(--font-body); }
