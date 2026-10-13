@@ -194,3 +194,20 @@ body.dialog-open { overflow: hidden; }
 @media (max-width: 1100px) { .bmi-card, .food-card { grid-column: span 6; } }
 @media (max-width: 760px) { .bmi-card, .food-card { grid-column: span 12; } .metric-results, .calorie-targets, .form-grid { grid-template-columns: 1fr; } .food-search-form { grid-template-columns: 1fr; } }
 
+.hydration-log-button { min-height: 34px; padding: 0 12px; color: var(--navy); background: var(--lime); font-size: 10px; }
+.hydration-log-button:hover { background: #e8fa88; }
+.hydration-progress-copy { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; color: rgba(255,255,255,.84); font-size: 10px; }
+.hydration-progress-copy strong { color: #fff; font-size: 11px; }
+.hydration-progress-copy b { color: #fff; }
+.hydration-card .progress-line { margin-top: 7px; }
+.water-quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+.water-quick-actions button { min-height: 36px; border: 1px solid rgba(255,255,255,.22); border-radius: 11px; color: #fff; background: rgba(255,255,255,.14); font-size: 10px; font-weight: 700; transition: background var(--ease), transform var(--ease); }
+.water-quick-actions button:hover { background: rgba(255,255,255,.28); transform: translateY(-1px); }
+.water-quick-actions button span { color: var(--lime); font-size: 14px; }
+.goal-field { display: block; margin-top: 22px; color: var(--muted); font-size: 11px; font-weight: 700; }
+#water-goal-select { width: 100%; height: 42px; margin-top: 7px; padding: 0 12px; border: 1px solid var(--line); border-radius: 10px; color: var(--ink); background: var(--surface-soft); font-size: 12px; }
+.water-presets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+.water-presets button { min-height: 40px; border: 1px solid var(--line); border-radius: 10px; color: var(--blue-deep); background: #fff; font-size: 10px; font-weight: 700; transition: border-color var(--ease), background var(--ease); }
+.water-presets button:hover { border-color: var(--blue-deep); background: #edf7fc; }
+@media (max-width: 760px) { .water-presets { grid-template-columns: 1fr; } }
+
