@@ -194,3 +194,39 @@ Keep changes small and explain the user-facing behavior in the commit message. F
 ## License
 
 No license has been declared yet. Treat this repository as all-rights-reserved unless the owner adds a license.
+
+
+## Latest functional features
+
+The dashboard now supports a first-run profile setup. The user can enter a display name, age, sex used for the estimate, height, weight, activity level, and daily focus. The first name is shown in the dashboard greeting, and the profile values are saved locally.
+
+The profile powers a personal metrics view:
+
+- BMI calculated from height and weight
+- BMI category indicator
+- Body surface area estimate
+- BMR estimate
+- Estimated calorie targets to lose, maintain, and gain weight
+- Mifflin–St Jeor calculation with an activity multiplier
+
+Hydration now includes a visible glasses count and goal. Each glass is represented as 250 ml, and the existing add/remove flow updates the daily total and progress bar.
+
+The food tracker includes:
+
+- Daily calorie total
+- Searchable starter food catalog for offline use
+- Live product search through the Open Food Facts API when network access is available
+- Calories, brand, serving size, and basic macro values for search results
+- One-click logging and removal of foods
+- Progress against the estimated maintenance target
+
+### Food-data sources
+
+The prototype uses [Open Food Facts](https://openfoodfacts.github.io/openfoodfacts-server/api/) for client-side product search. It is an open product database, so coverage and nutrition accuracy can vary by product and country. The app keeps a small local starter catalog as a fallback.
+
+For a production food tracker, use a server-side integration with a managed nutrition data provider or [USDA FoodData Central](https://fdc.nal.usda.gov/api-guide/) so API keys, rate limits, normalization, attribution, and data quality can be controlled securely. Never expose a private production API key in browser JavaScript.
+
+### Important health-product limitations
+
+BMI and calorie values are general estimates and can be inappropriate for children, pregnancy, athletes, eating-disorder recovery, or some medical conditions. The current UI is a learning prototype and must not be presented as medical guidance. Production release requires qualified clinical, privacy, security, and legal review.
+
