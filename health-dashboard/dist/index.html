@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <a class="skip-link" href="#overview">Skip to dashboard</a>
     <div class="app-shell">
       <aside class="sidebar" id="sidebar" aria-label="Primary navigation">
         <div class="sidebar-top">
@@ -44,12 +45,12 @@
 
         <div class="nav-divider"></div>
         <nav class="nav-list nav-list-secondary" aria-label="Account navigation">
-          <a class="nav-item" href="#notifications" data-label="Notifications">
+          <a class="nav-item" href="#notifications" data-label="Notifications" id="notifications-link">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4" /></svg>
             <span>Notifications</span>
             <span class="notification-dot" aria-label="2 unread notifications"></span>
           </a>
-          <a class="nav-item" href="#settings" data-label="Settings">
+          <a class="nav-item" href="#settings" data-label="Settings" data-modal="settings-modal">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zm8 3.5l-2-.7a6.2 6.2 0 0 0-.7-1.7l.9-1.9-1.9-1.9-1.9.9a6.2 6.2 0 0 0-1.7-.7L12 4H9.3l-.7 2a6.2 6.2 0 0 0-1.7.7L5 5.8 3.1 7.7 4 9.6a6.2 6.2 0 0 0-.7 1.7l-2 .7v2.7l2 .7a6.2 6.2 0 0 0 .7 1.7l-.9 1.9L5 20.9l1.9-.9a6.2 6.2 0 0 0 1.7.7l.7 2H12l.7-2a6.2 6.2 0 0 0 1.7-.7l1.9.9 1.9-1.9-.9-1.9a6.2 6.2 0 0 0 .7-1.7l2-.7z" /></svg>
             <span>Settings</span>
           </a>
@@ -118,7 +119,7 @@
                 <span class="metric-icon icon-blue" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3S5.5 10.1 5.5 14.5a6.5 6.5 0 0 0 13 0C18.5 10.1 12 3 12 3z" /></svg></span>
                 <div><h3>Hydration</h3><p>Daily water goal</p></div>
               </div>
-              <button class="more-button" type="button" aria-label="More hydration options">•••</button>
+              <button class="more-button" type="button" aria-label="More hydration options" data-modal="hydration-modal">•••</button>
             </div>
             <div class="water-visual">
               <div class="water-rings" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
@@ -126,6 +127,11 @@
               <small>of 2.2 L today</small>
             </div>
             <div class="progress-line"><span style="width: 73%"></span></div>
+            <div class="range-switch" aria-label="Hydration time range">
+              <button type="button" data-range="D" aria-pressed="true">D</button>
+              <button type="button" data-range="W" aria-pressed="false">W</button>
+              <button type="button" data-range="M" aria-pressed="false">M</button>
+            </div>
           </article>
 
           <article class="card sleep-card reveal" id="plans">
@@ -134,7 +140,7 @@
                 <span class="metric-icon icon-lilac" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17.8 15.6A7 7 0 0 1 8.4 6.2 7 7 0 1 0 17.8 15.6z" /></svg></span>
                 <div><h3>Sleep rhythm</h3><p>Last night</p></div>
               </div>
-              <button class="more-button" type="button" aria-label="More sleep options">•••</button>
+              <button class="more-button" type="button" aria-label="More sleep options" data-modal="sleep-modal">•••</button>
             </div>
             <div class="sleep-score"><strong>82</strong><span>/ 100</span><em>Good</em></div>
             <div class="sleep-bars" aria-label="Sleep quality timeline"><i style="height: 38%"></i><i style="height: 54%"></i><i style="height: 80%"></i><i style="height: 64%"></i><i style="height: 92%"></i><i style="height: 72%"></i><i style="height: 48%"></i><i style="height: 67%"></i><i style="height: 40%"></i><i style="height: 75%"></i><i style="height: 56%"></i><i style="height: 88%"></i></div>
@@ -147,7 +153,7 @@
                 <span class="metric-icon icon-mint" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 16.5c1.7-3.1 3.7-5.8 6.8-7.6 2-1.1 4.8-1.3 7.2-1.1M5 16.5l3.3.8M5 16.5l.7-3.2" /></svg></span>
                 <div><h3>Movement</h3><p>Weekly rhythm</p></div>
               </div>
-              <button class="more-button" type="button" aria-label="More movement options">•••</button>
+              <button class="more-button" type="button" aria-label="More movement options" data-modal="movement-modal">•••</button>
             </div>
             <div class="movement-copy"><strong>3 <span>of 4</span></strong><p>active days<br />this week</p></div>
             <div class="week-dots" aria-label="Three active days out of four"><span class="done">M</span><span class="done">T</span><span class="done">W</span><span> T</span><span>F</span><span>S</span><span>S</span></div>
@@ -170,8 +176,71 @@
       </main>
     </div>
 
+    <div class="modal-backdrop" id="modal-backdrop" hidden></div>
+    <section class="dialog" id="plan-modal" role="dialog" aria-modal="true" aria-labelledby="plan-modal-title" hidden>
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Close evening routine dialog">×</button>
+      <span class="dialog-kicker">Evening routine</span>
+      <h2 id="plan-modal-title">A gentle four-step reset.</h2>
+      <p>Use this as a calm checklist. It is a demo flow and not medical advice.</p>
+      <ol class="routine-list">
+        <li><span>01</span><div><strong>Dim your environment</strong><small>Reduce brightness and noise for five minutes.</small></div></li>
+        <li><span>02</span><div><strong>Take three slow breaths</strong><small>Choose a comfortable pace and stop if you feel unwell.</small></div></li>
+        <li><span>03</span><div><strong>Park tomorrow’s thoughts</strong><small>Write one note so you can return to it later.</small></div></li>
+        <li><span>04</span><div><strong>Pick a consistent lights-out time</strong><small>Small, repeatable choices are the goal.</small></div></li>
+      </ol>
+      <button class="button button-dark dialog-primary" type="button" id="complete-plan">Mark routine complete <span aria-hidden="true">✓</span></button>
+    </section>
+    <section class="dialog compact-dialog" id="upgrade-modal" role="dialog" aria-modal="true" aria-labelledby="upgrade-title" hidden>
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Close upgrade dialog">×</button>
+      <span class="dialog-kicker">Carewell Plus</span>
+      <h2 id="upgrade-title">A clearer view of your patterns.</h2>
+      <p>This product tier is a placeholder for a future billing and plan-selection flow.</p>
+      <div class="plan-options"><button class="plan-option selected" type="button" data-plan="Monthly"><strong>Monthly</strong><span>$8 / month</span></button><button class="plan-option" type="button" data-plan="Annual"><strong>Annual</strong><span>$72 / year</span></button></div>
+      <button class="button button-dark dialog-primary" type="button" id="choose-plan">Choose plan <span aria-hidden="true">→</span></button>
+    </section>
+    <section class="dialog compact-dialog" id="profile-modal" role="dialog" aria-modal="true" aria-labelledby="profile-title" hidden>
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Close profile dialog">×</button>
+      <span class="dialog-kicker">Your profile</span>
+      <h2 id="profile-title">Keep your dashboard personal.</h2>
+      <form id="profile-form" class="profile-form">
+        <label for="profile-name">Display name</label><input id="profile-name" name="profile-name" value="Alex Rivera" autocomplete="name" />
+        <label for="profile-goal">Daily focus</label><select id="profile-goal" name="profile-goal"><option>Better sleep</option><option>More movement</option><option>Steadier hydration</option></select>
+        <button class="button button-dark dialog-primary" type="submit">Save profile <span aria-hidden="true">✓</span></button>
+      </form>
+    </section>
+    <section class="dialog compact-dialog" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title" hidden>
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Close settings dialog">×</button>
+      <span class="dialog-kicker">Privacy settings</span>
+      <h2 id="settings-title">Your data, your choices.</h2>
+      <div class="setting-row"><div><strong>Weekly reminders</strong><small>Get a gentle nudge when a plan is waiting.</small></div><button class="toggle is-on" type="button" role="switch" aria-checked="true" data-setting="reminders"><span></span></button></div>
+      <div class="setting-row"><div><strong>Personalized insights</strong><small>Use your demo metrics to tailor note copy.</small></div><button class="toggle is-on" type="button" role="switch" aria-checked="true" data-setting="insights"><span></span></button></div>
+      <button class="button button-dark dialog-primary" type="button" id="save-settings">Save settings <span aria-hidden="true">✓</span></button>
+    </section>
+    <section class="dialog compact-dialog" id="hydration-modal" role="dialog" aria-modal="true" aria-labelledby="hydration-title" hidden>
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Close hydration dialog">×</button>
+      <span class="dialog-kicker">Hydration</span>
+      <h2 id="hydration-title">Log a glass of water.</h2>
+      <p>Demo data is stored only in this browser.</p>
+      <div class="hydration-stepper"><button type="button" id="remove-water" aria-label="Remove 250 milliliters">−</button><strong><span id="water-entry">250</span> ml</strong><button type="button" id="add-water" aria-label="Add 250 milliliters">+</button></div>
+      <button class="button button-dark dialog-primary" type="button" id="save-water">Add to today <span aria-hidden="true">✓</span></button>
+    </section>
+    <section class="dialog compact-dialog" id="sleep-modal" role="dialog" aria-modal="true" aria-labelledby="sleep-title" hidden>
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Close sleep dialog">×</button>
+      <span class="dialog-kicker">Sleep rhythm</span>
+      <h2 id="sleep-title">How did last night feel?</h2>
+      <div class="sleep-feedback"><button type="button" data-sleep="Restful">Restful</button><button type="button" data-sleep="Okay">Okay</button><button type="button" data-sleep="Restless">Restless</button></div>
+      <p id="sleep-feedback-copy" class="feedback-copy">Your selection will shape the next demo insight.</p>
+    </section>
+    <section class="dialog compact-dialog" id="movement-modal" role="dialog" aria-modal="true" aria-labelledby="movement-title" hidden>
+      <button class="dialog-close" type="button" data-close-dialog aria-label="Close movement dialog">×</button>
+      <span class="dialog-kicker">Movement plan</span>
+      <h2 id="movement-title">Choose a small win.</h2>
+      <div class="movement-options"><button type="button" data-movement="10-minute walk">10-minute walk</button><button type="button" data-movement="Stretch break">Stretch break</button><button type="button" data-movement="Mobility reset">Mobility reset</button></div>
+      <p id="movement-feedback-copy" class="feedback-copy">Pick one to mark today’s plan.</p>
+    </section>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <div class="overlay" id="overlay" hidden></div>
     <script src="app.js"></script>
   </body>
 </html>
+

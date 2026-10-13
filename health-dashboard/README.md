@@ -15,9 +15,11 @@ Then open <http://localhost:4173>.
 ## Current scope
 
 - Responsive dashboard shell with collapsible mobile navigation
-- Hero card for a guided activity
-- Hydration, sleep, energy, and movement metric cards
-- Search, time-range controls, and toast feedback as interaction placeholders
-- Accessibility-minded focus states and reduced-motion handling
+- Hero card for a guided activity with a completable routine flow
+- Hydration, sleep, and movement metric cards with working demo controls
+- Search, time-range controls, profile editing, privacy settings, notifications, and upgrade selection
+- Accessible dialogs with focus return, keyboard focus trapping, visible focus states, and reduced-motion handling
+- Local persistence through `localStorage` so demo changes survive a refresh
 
-The metrics and copy are illustrative placeholders, not medical advice or clinical claims.
+The metrics and copy are illustrative placeholders, not medical advice or clinical claims. Real authentication, health-device integrations, billing, and secure server-side storage are separate production workstreams.
+
