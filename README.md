@@ -1,6 +1,6 @@
 # Health Website
 
-This repository contains the source code for the **NimbusCart Apparel** e‑commerce website.
+This repository contains the source code for the **Wellness** website.
 
 ## File Structure
 ```
