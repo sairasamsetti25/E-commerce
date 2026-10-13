@@ -1,0 +1,27 @@
+/* Motion is intentionally isolated from component layout. Replace this file to change the product's motion language. */
+:root {
+  --motion-duration: 180ms;
+  --motion-enter-duration: 500ms;
+  --motion-ease: cubic-bezier(.22, .8, .25, 1);
+}
+
+html { scroll-behavior: smooth; }
+.reveal { animation: carewell-reveal var(--motion-enter-duration) var(--motion-ease) both; }
+.reveal:nth-child(2) { animation-delay: 60ms; }
+.reveal:nth-child(3) { animation-delay: 120ms; }
+.reveal:nth-child(4) { animation-delay: 180ms; }
+.reveal:nth-child(5) { animation-delay: 240ms; }
+
+@keyframes carewell-reveal {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
