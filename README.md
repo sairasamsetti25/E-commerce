@@ -1,4 +1,4 @@
-# NimbusCart Apparel Site
+# Health Website
 
 This repository contains the source code for the **NimbusCart Apparel** e‑commerce website.
 
