@@ -270,8 +270,8 @@ The repository is public so beginners can learn from the source code. The `main`
 
 - Direct changes to `main` are not allowed.
 - Every change must be submitted through a pull request.
-- At least one approval is required before merging.
+- Collaborators need at least one approval before merging.
 - New commits dismiss earlier approvals.
-- The protection rule cannot be bypassed.
+- The repository owner can bypass the review requirement when necessary.
 
-For a contribution, create a feature branch, make and test your change, push the branch, open a pull request, and wait for review before merging.
+For a contribution, create a feature branch, make and test your change, push the branch, open a pull request, and wait for review before merging. The owner may merge without waiting for approval.
