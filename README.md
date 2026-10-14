@@ -81,8 +81,8 @@ This repository is intentionally **public** so learners can read and study the c
 The `main` branch is protected on GitHub:
 
 - Changes must come through a pull request.
-- At least one approval is required before merging.
+- Collaborators need at least one approval before merging.
 - New commits dismiss earlier approvals, so the latest version must be reviewed.
-- The protection rule cannot be bypassed.
+- The repository owner can bypass the review requirement when necessary.
 
-Use a feature branch for every change, push that branch, open a pull request, and wait for review before merging into `main`.
+Use a feature branch for every change, push that branch, open a pull request, and wait for review before merging into `main`. The owner may merge without waiting for approval.
