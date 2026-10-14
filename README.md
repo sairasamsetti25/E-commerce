@@ -9,7 +9,7 @@ The main project is inside [`health-dashboard/`](health-dashboard/). It is a bui
 - [Open the Carewell project](health-dashboard/)
 - [Read the beginner-friendly project README](health-dashboard/README.md)
 - [Follow the step-by-step learning guide](health-dashboard/BEGINNER_GUIDE.md)
-- [Open the working website preview](https://htmlpreview.github.io/?https://raw.githubusercontent.com/sairasamsetti25/E-commerce/main/health-dashboard/dist/index.html)
+- [Open the working website preview](https://htmlpreview.github.io/?https://raw.githubusercontent.com/sairasamsetti25/Health-App/main/health-dashboard/dist/index.html)
 
 ## What Carewell includes
 
@@ -44,8 +44,8 @@ If you are learning the project, start inside `health-dashboard/`. The root-leve
 Install [Git](https://git-scm.com/downloads) and [Python 3](https://www.python.org/downloads/), then run:
 
 ```bash
-git clone https://github.com/sairasamsetti25/E-commerce.git
-cd E-commerce/health-dashboard
+git clone https://github.com/sairasamsetti25/Health-App.git
+cd Health-App/health-dashboard
 python3 -m http.server 4173 --directory dist
 ```
 
