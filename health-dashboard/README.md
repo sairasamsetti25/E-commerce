@@ -74,6 +74,18 @@ health-dashboard/
 └── BEGINNER_GUIDE.md   # Step-by-step learning guide
 ```
 
+## Code organization
+
+The main application entry point is `dist/app.js`. It connects the page to focused modules under `dist/js/`:
+
+- `config.js` — defaults and starter food data
+- `state.js` — local persistence and shared application state
+- `calculations.js` — BMI, BMR, and calorie calculations
+- `ui.js` — dialogs, menus, toast messages, and focus behavior
+- `food.js` — food logging and nutrition API adapters
+
+Keep new feature behavior in a focused module and use `app.js` only for application composition and event wiring. This keeps the project easier to test, replace, and eventually move behind a backend API.
+
 ## How the website works
 
 ### 1. The page starts with HTML
