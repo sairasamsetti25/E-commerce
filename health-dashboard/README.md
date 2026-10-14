@@ -13,6 +13,17 @@ This project is designed to be easy to learn from. It does not use React, a data
 
 > **Important:** The health values in this project are examples and estimates. This is not medical advice or a medical device.
 
+## Clone the repository
+
+Install Git, then run:
+
+```bash
+git clone https://github.com/sairasamsetti25/E-commerce.git
+cd E-commerce/health-dashboard
+```
+
+The `main` branch contains the current version of the Carewell dashboard.
+
 ## Open the website
 
 ### Easiest option: use the preview
@@ -23,16 +34,13 @@ The preview is useful for trying the interface. It is not a production deploymen
 
 ### Run it on your computer
 
-1. Install Python 3 if it is not already installed.
-2. Download or clone this repository.
-3. Open a terminal in the `health-dashboard` folder.
-4. Run:
+From the `health-dashboard` folder, run:
 
 ```bash
 python3 -m http.server 4173 --directory dist
 ```
 
-5. Open [http://localhost:4173](http://localhost:4173) in your browser.
+Then open [http://localhost:4173](http://localhost:4173) in your browser.
 
 There is no `npm install`, build command, or framework setup required.
 
