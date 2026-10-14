@@ -4,7 +4,7 @@ export const defaultState = {
   waterMl: 1600, waterGoalMl: 2200, planComplete: false, movementDone: 3,
   profileName: '', profileGoal: 'Better sleep', profileAge: 32, profileSex: 'female',
   profileHeight: 178, profileWeight: 71, profileActivity: 1.55, reminders: true,
-  insights: true, selectedRange: 'D', selectedPlan: 'Monthly', foodLog: [],
+  insights: true, insightSaved: false, selectedRange: 'D', selectedPlan: 'Monthly', foodLog: [],
 };
 
 export const localFoods = [
