@@ -39,15 +39,37 @@ The main project is inside [`health-dashboard/`](health-dashboard/). It is a bui
 
 If you are learning the project, start inside `health-dashboard/`. The root-level files are retained for reference and are not the current Carewell dashboard.
 
-## Local setup
+## Clone and run locally
 
-From the repository root:
+Install [Git](https://git-scm.com/downloads) and [Python 3](https://www.python.org/downloads/), then run:
 
 ```bash
-cd health-dashboard
+git clone https://github.com/sairasamsetti25/E-commerce.git
+cd E-commerce/health-dashboard
 python3 -m http.server 4173 --directory dist
 ```
 
-Then open [http://localhost:4173](http://localhost:4173).
+Open [http://localhost:4173](http://localhost:4173) in your browser. Stop the local server with `Ctrl+C`.
+
+There is no `npm install` or build command for the current static prototype.
+
+## Make a change
+
+Create a branch before editing:
+
+```bash
+git checkout -b improve-dashboard
+```
+
+After testing your change locally:
+
+```bash
+git status
+git add .
+git commit -m "Describe the dashboard improvement"
+git push -u origin improve-dashboard
+```
+
+Open a pull request on GitHub so the change can be reviewed before it is merged into `main`.
 
 For more detail, see the [Carewell README](health-dashboard/README.md).
