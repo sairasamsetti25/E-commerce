@@ -4,7 +4,7 @@ This guide assumes you have never built a website before.
 
 ## Step 1: Open the project
 
-Use the [Carewell preview](https://htmlpreview.github.io/?https://raw.githubusercontent.com/sairasamsetti25/E-commerce/main/health-dashboard/dist/index.html) first.
+Use the [Carewell preview](https://htmlpreview.github.io/?https://raw.githubusercontent.com/sairasamsetti25/Health-App/main/health-dashboard/dist/index.html) first.
 
 Click:
 
@@ -18,13 +18,21 @@ Click:
 
 This gives you a picture of what the code is supposed to do.
 
-## Step 2: Understand the three main files
+## Step 2: Understand the main files and modules
 
 The website is built from three basic technologies:
 
 - `index.html`: words, buttons, forms, and sections
 - `styles.css`: layout and visual design
-- `app.js`: calculations and interactions
+- `app.js`: application wiring and event handlers
+
+The behavior is split into focused modules inside `dist/js/`:
+
+- `config.js`: default state and starter food data
+- `state.js`: browser persistence and shared state
+- `calculations.js`: BMI, BMR, and calorie calculations
+- `ui.js`: dialogs, menus, toast messages, and focus behavior
+- `food.js`: food logging and nutrition API adapters
 
 There are two supporting style files:
 
