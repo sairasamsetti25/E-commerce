@@ -53,6 +53,9 @@ function updateDashboard() {
   document.querySelector('#profile-goal').value = state.profileGoal;
   document.querySelectorAll('[data-setting]').forEach((button) => { const enabled = Boolean(state[button.dataset.setting]); button.classList.toggle('is-on', enabled); button.setAttribute('aria-checked', String(enabled)); });
   document.querySelectorAll('[data-range]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.range === state.selectedRange)));
+  const insightButton = document.querySelector('#save-insight');
+  insightButton.textContent = state.insightSaved ? 'Note saved ✓' : 'Save note →';
+  insightButton.classList.toggle('is-complete', state.insightSaved);
   food.renderFoodLog();
 }
 
@@ -88,6 +91,7 @@ document.querySelector('#open-movement').addEventListener('click', (event) => ui
 document.querySelector('#profile-form').addEventListener('submit', (event) => { event.preventDefault(); const form = new FormData(event.currentTarget); state.profileName = String(form.get('profile-name') || '').trim(); state.profileGoal = String(form.get('profile-goal')); state.profileAge = Number(form.get('profile-age')) || 32; state.profileSex = String(form.get('profile-sex')); state.profileHeight = Number(form.get('profile-height')) || 178; state.profileWeight = Number(form.get('profile-weight')) || 71; state.profileActivity = Number(form.get('profile-activity')) || 1.55; if (!state.profileName) { ui.showToast('Add your name to create a profile.'); document.querySelector('#profile-name').focus(); return; } saveState(); updateDashboard(); ui.closeDialog(); ui.showToast(`Welcome, ${firstName()}. Your metrics are updated.`); });
 document.querySelectorAll('[data-setting]').forEach((button) => button.addEventListener('click', () => { state[button.dataset.setting] = !state[button.dataset.setting]; updateDashboard(); }));
 document.querySelector('#save-settings').addEventListener('click', () => { saveState(); ui.closeDialog(); ui.showToast('Privacy settings saved.'); });
+document.querySelector('#save-insight').addEventListener('click', () => { state.insightSaved = true; saveState(); updateDashboard(); ui.showToast('Carewell note saved for today.'); });
 document.querySelectorAll('[data-range]').forEach((button) => button.addEventListener('click', () => { state.selectedRange = button.dataset.range; saveState(); updateDashboard(); ui.showToast(`Hydration view changed to ${button.textContent === 'D' ? 'today' : button.textContent === 'W' ? 'this week' : 'this month'}.`); }));
 document.querySelector('#food-search-form').addEventListener('submit', (event) => { event.preventDefault(); const query = document.querySelector('#food-search').value.trim(); if (query) food.searchFoods(query); });
 
