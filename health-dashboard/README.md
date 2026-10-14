@@ -18,8 +18,8 @@ This project is designed to be easy to learn from. It does not use React, a data
 Install Git, then run:
 
 ```bash
-git clone https://github.com/sairasamsetti25/E-commerce.git
-cd E-commerce/health-dashboard
+git clone https://github.com/sairasamsetti25/Health-App.git
+cd Health-App/health-dashboard
 ```
 
 The `main` branch contains the current version of the Carewell dashboard.
@@ -28,7 +28,7 @@ The `main` branch contains the current version of the Carewell dashboard.
 
 ### Easiest option: use the preview
 
-[Open the working Carewell preview](https://htmlpreview.github.io/?https://raw.githubusercontent.com/sairasamsetti25/E-commerce/main/health-dashboard/dist/index.html)
+[Open the working Carewell preview](https://htmlpreview.github.io/?https://raw.githubusercontent.com/sairasamsetti25/Health-App/main/health-dashboard/dist/index.html)
 
 The preview is useful for trying the interface. It is not a production deployment.
 
