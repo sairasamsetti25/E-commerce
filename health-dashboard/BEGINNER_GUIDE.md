@@ -178,3 +178,19 @@ style: increase profile form spacing
 feat: add quick hydration logging
 docs: explain food search for beginners
 ```
+
+## Step 10: Work safely with pull requests
+
+This project keeps the repository public for learning, but protects the `main` branch.
+
+Use this workflow:
+
+1. Create a branch: `git checkout -b improve-dashboard`.
+2. Make one focused change.
+3. Test it locally.
+4. Commit and push the branch with `git add .`, `git commit -m "Describe the change"`, and `git push -u origin improve-dashboard`.
+5. Open a pull request on GitHub.
+6. Ask for a review.
+7. Merge only after at least one approval.
+
+GitHub will request a new review if you push new commits after an approval. Do not push directly to `main`.
