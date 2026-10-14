@@ -73,3 +73,16 @@ git push -u origin improve-dashboard
 Open a pull request on GitHub so the change can be reviewed before it is merged into `main`.
 
 For more detail, see the [Carewell README](health-dashboard/README.md).
+
+## Repository visibility and merge policy
+
+This repository is intentionally **public** so learners can read and study the code.
+
+The `main` branch is protected on GitHub:
+
+- Changes must come through a pull request.
+- At least one approval is required before merging.
+- New commits dismiss earlier approvals, so the latest version must be reviewed.
+- The protection rule cannot be bypassed.
+
+Use a feature branch for every change, push that branch, open a pull request, and wait for review before merging into `main`.
