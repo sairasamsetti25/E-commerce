@@ -263,3 +263,15 @@ If you are teaching this project, use this order:
 8. Commit the change with a clear message.
 
 For a guided lesson, see [BEGINNER_GUIDE.md](BEGINNER_GUIDE.md).
+
+## GitHub collaboration rules
+
+The repository is public so beginners can learn from the source code. The `main` branch is protected:
+
+- Direct changes to `main` are not allowed.
+- Every change must be submitted through a pull request.
+- Collaborators need at least one approval before merging.
+- New commits dismiss earlier approvals.
+- The repository owner can bypass the review requirement when necessary.
+
+For a contribution, create a feature branch, make and test your change, push the branch, open a pull request, and wait for review before merging. The owner may merge without waiting for approval.
